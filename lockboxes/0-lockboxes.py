@@ -1,6 +1,9 @@
+#!/usr/bin/python3
+"""Module for checking if all boxes can be opened"""
 from collections import deque
 
 def canUnlockAll(boxes):
+    """main function to check if the boxes can be opened"""
     visited = set([0])
     queue = deque([0])
 
