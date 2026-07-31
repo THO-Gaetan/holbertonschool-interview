@@ -5,9 +5,8 @@
 #include "sandpiles.h"
 
 /**
- * print_grid_sum - Print 3x3 grids sum
- * @grid1: Left 3x3 grid
- * @grid2: Right 3x3 grid
+ * print_grid - Print 3x3 grids sum
+ * @grid: 3x3 grid
  *
  */
 
