@@ -1,7 +1,9 @@
 #!/usr/bin/python3
 """
-Function to calculate the minimum number of operations to reach a given number of characters
+Function to calculate the minimum number of operations
+to reach a given number of characters
 """
+
 
 def minOperations(n):
     """
