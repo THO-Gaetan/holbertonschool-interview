@@ -1,42 +1,53 @@
 #!/usr/bin/python3
 """Reads stdin line by line and computes HTTP log metrics."""
+import re
 import sys
+
+LOG_RE = re.compile(
+    r'^\S+ - \[[^\]]*\] "GET /projects/260 HTTP/1\.1" (\d+) (\d+)\s*$'
+)
+
+STATUS_CODES = [200, 301, 400, 401, 403, 404, 405, 500]
+
+
+def print_stats(total_size, status_counts):
+    print("File size: {}".format(total_size))
+    for code in STATUS_CODES:
+        if status_counts.get(code):
+            print("{}: {}".format(code, status_counts[code]))
+
+
+def run():
+    total_size = 0
+    status_counts = {}
+    line_count = 0
+
+    try:
+        for line in sys.stdin:
+            match = LOG_RE.match(line)
+            if not match:
+                continue
+
+            status_code, file_size = match.groups()
+
+            try:
+                status_code = int(status_code)
+            except ValueError:
+                continue
+
+            total_size += int(file_size)
+            if status_code in STATUS_CODES:
+                status_counts[status_code] = status_counts.get(status_code, 0) + 1
+
+            line_count += 1
+            if line_count % 10 == 0:
+                print_stats(total_size, status_counts)
+    except KeyboardInterrupt:
+        print_stats(total_size, status_counts)
+        raise
+    else:
+        print_stats(total_size, status_counts)
+
+
 if __name__ == "__main__":
-    st_code = {"200": 0,
-               "301": 0,
-               "400": 0,
-               "401": 0,
-               "403": 0,
-               "404": 0,
-               "405": 0,
-               "500": 0}
-    count = 1
-    file_size = 0
-
-    def parse_line(line):
-        """Parses a line of input and updates the metrics."""
-        global file_size
-        global st_code
-        try:
-            parts = line.split()
-            file_size += int(parts[-1])
-            status_code = parts[-2]
-            if status_code in st_code:
-                st_code[status_code] += 1
-        except (IndexError, ValueError):
-            pass
-
-    def print_metrics():
-        """Prints the current metrics."""
-        print("File size: {}".format(file_size))
-        for code in sorted(st_code.keys()):
-            if st_code[code] > 0:
-                print("{}: {}".format(code, st_code[code]))
-
-    for line in sys.stdin:
-        parse_line(line)
-        if count % 10 == 0:
-            print_metrics()
-        count += 1
-    
-
+    run()
