@@ -15,7 +15,8 @@ def validUTF8(data):
     # Implementation for validating UTF-8 encoding
     i = 0
     while i < len(data):
-        byte = data[i]
+        byte = data[i] & 0xFF
+
         if byte >> 7 == 0:
             # 1-byte character (0xxxxxxx)
             i += 1
@@ -42,4 +43,3 @@ def validUTF8(data):
         else:
             return False
     return True
-    
