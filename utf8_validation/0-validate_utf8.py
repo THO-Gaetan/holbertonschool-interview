@@ -21,22 +21,22 @@ def validUTF8(data):
             i += 1
         elif byte >> 5 == 0b110:
             # 2-byte character (110xxxxx 10xxxxxx)
-            if i + 1 >= len(data) or data[i + 1] >> 6 != 0b10:
+            if i + 1 >= len(data) or (data[i + 1] & 0xFF) >> 6 != 0b10:
                 return False
             i += 2
         elif byte >> 4 == 0b1110:
             # 3-byte character (1110xxxx 10xxxxxx 10xxxxxx)
             if (i + 2 >= len(data) or
-                    data[i + 1] >> 6 != 0b10 or
-                    data[i + 2] >> 6 != 0b10):
+                    (data[i + 1] & 0xFF) >> 6 != 0b10 or
+                    (data[i + 2] & 0xFF) >> 6 != 0b10):
                 return False
             i += 3
         elif byte >> 3 == 0b11110:
             # 4-byte character (11110xxx 10xxxxxx 10xxxxxx 10xxxxxx)
             if (i + 3 >= len(data) or
-                    data[i + 1] >> 6 != 0b10 or
-                    data[i + 2] >> 6 != 0b10 or
-                    data[i + 3] >> 6 != 0b10):
+                    (data[i + 1] & 0xFF) >> 6 != 0b10 or
+                    (data[i + 2] & 0xFF) >> 6 != 0b10 or
+                    (data[i + 3] & 0xFF) >> 6 != 0b10):
                 return False
             i += 4
         else:
