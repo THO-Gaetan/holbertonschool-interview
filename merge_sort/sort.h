@@ -1,0 +1,11 @@
+#ifndef SORT_H
+#define SORT_H
+
+#include <stddef.h>
+
+void print_array(const int *array, size_t size);
+void merge_sort(int *array, size_t size);
+void merge_sort_rec(int *array, int *tmp, size_t size);
+void merge_parts(int *array, int *tmp, size_t mid, size_t size);
+
+#endif /* SORT_H */
